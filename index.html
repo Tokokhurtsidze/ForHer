@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Tu B'Av — Maya 🌸 !</title>
+  <style>
+    :root{
+      --bg-a:#1b0037; --bg-b:#2a0b3a; --accent1:#ff6fb1; --accent2:#ffb199; --accent3:#ffd166;
+      --glass: rgba(255,255,255,0.06);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+      color:#fff; display:flex; align-items:center; justify-content:center; padding:28px; background:#0b0712;
+      overflow:hidden;
+    }
+
+    /* animated gradient background */
+    .bg-animated{position:fixed;inset:0;z-index:-3;background:linear-gradient(120deg,var(--bg-a),#3a1540 30%, #5a2b6e 60%, #f6a6c1 100%);background-size:300% 300%;animation:grad 18s linear infinite;filter:blur(28px) saturate(1.05);opacity:0.95;transition:filter .6s, box-shadow .6s}
+    .bg-animated.pulse{animation:grad 7s linear infinite;filter:blur(12px) saturate(1.2);box-shadow:0 0 120px rgba(255,100,160,0.18) inset}
+    @keyframes grad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    /* subtle layered waves */
+    .wave{position:fixed;left:-20%;right:-20%;height:60vh;top:10%;opacity:0.06;background:conic-gradient(from 180deg at 50% 50%, rgba(255,255,255,0.12), transparent);transform:rotate(-12deg);filter:blur(40px);z-index:-2}
+
+    .wrap{width:100%;max-width:1060px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));border-radius:26px;padding:28px;box-shadow:0 18px 60px rgba(4,2,10,0.6);backdrop-filter:blur(8px);display:grid;grid-template-columns:380px 1fr;gap:28px;align-items:center;position:relative;overflow:visible
+    }
+    @media(max-width:900px){.card{grid-template-columns:1fr;padding:20px}}
+
+    /* left: profile + small decor */
+    .left{display:flex;flex-direction:column;align-items:center;text-align:center}
+    .frame{width:320px;height:320px;border-radius:26px;overflow:hidden;border:8px solid rgba(255,255,255,0.06);box-shadow:0 18px 60px rgba(0,0,0,0.6);position:relative}
+    .frame img{width:100%;height:100%;object-fit:cover;display:block}
+    .frame::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);mix-blend-mode:overlay}
+    .ribbon{margin-top:14px;background:linear-gradient(90deg,var(--accent1),var(--accent2));padding:8px 14px;border-radius:999px;color:#2b0022;font-weight:700;box-shadow:0 8px 24px rgba(255,110,150,0.12)}
+
+    /* right: greetings */
+    .title{font-size:30px;margin:0 0 8px;line-height:1.02;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .subtitle{color:rgba(255,255,255,0.92);margin:0 0 16px;font-size:16px}
+
+    /* animated letters */
+    .fancy{display:inline-block;overflow:hidden}
+    .fancy span{display:inline-block;opacity:0;transform:translateY(8px) rotateX(12deg);animation:lift .8s forwards;}
+    .fancy span:nth-child(1){animation-delay:0.03s} .fancy span:nth-child(2){animation-delay:0.06s}
+    @keyframes lift{to{opacity:1;transform:none}}
+
+    .question{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px 16px;border-radius:14px;margin-bottom:18px}
+    .question strong{display:block;font-size:18px}
+
+    .actions{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+    .btn{position:relative;border:0;padding:12px 24px;border-radius:999px;font-weight:800;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;gap:10px}
+    .btn:focus{outline:3px solid rgba(255,255,255,0.08);outline-offset:3px}
+
+    .btn.yes{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#2b0022;box-shadow:0 12px 34px rgba(255,110,150,0.22);transform:translateZ(0)}
+    .btn.no{background:transparent;border:2px solid rgba(255,255,255,0.06);color:#fff}
+    .btn.no.moving{animation:moveSide 2.6s ease-in-out infinite}
+    @keyframes moveSide{0%{transform:translateX(0)}25%{transform:translateX(8px)}60%{transform:translateX(-6px)}100%{transform:translateX(0)}}
+
+    .note{margin-top:12px;color:rgba(255,255,255,0.8);font-size:13px}
+
+    /* confetti hearts container */
+    .hearts-layer{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:60}
+
+    /* floating message */
+    .float-msg{position:fixed;left:50%;top:40%;transform:translate(-50%, -50%) scale(0.9);padding:18px 26px;border-radius:16px;background:linear-gradient(90deg,#fff7fb,#ffeef5);color:#3b0022;font-weight:800;font-size:20px;opacity:0;pointer-events:none;box-shadow:0 20px 60px rgba(200,30,90,0.12);z-index:140}
+    .float-msg.show{animation:popFade 2200ms cubic-bezier(.2,.9,.2,1) forwards}
+    @keyframes popFade{0%{transform:translate(-50%,-50%) scale(0.86);opacity:0}10%{transform:translate(-50%,-50%) scale(1.06);opacity:1}80%{transform:translate(-50%,-220%) scale(1);opacity:1}100%{transform:translate(-50%,-420%) scale(0.96);opacity:0}}
+
+    /* fireworks canvas sits above background but under UI */
+    #fw {position:fixed;left:0;top:0;width:100%;height:100%;z-index:50;pointer-events:none}
+
+    /* confetti pieces */
+    .confetti{position:fixed;width:10px;height:16px;opacity:0.95;z-index:80;border-radius:2px}
+
+    /* footer small */
+    .credit{position:absolute;right:18px;bottom:12px;font-size:12px;color:rgba(255,255,255,0.6)}
+
+    /* responsive tweaks */
+    @media(max-width:520px){.frame{width:220px;height:220px}.title{font-size:22px}.float-msg{font-size:16px;padding:12px 18px}}
+  </style>
+</head>
+<body>
+  <div class="bg-animated" id="bg"></div>
+  <div class="wave"></div>
+  <canvas id="fw"></canvas>
+
+  <div class="wrap">
+    <div class="card" id="card">
+      <div class="left">
+        <div class="frame" id="photoFrame">
+          <img id="photo" src="./img/maya.jpeg" alt="Maya">
+        </div>
+        <div class="ribbon">Happy Tu B'Av — Maya</div>
+      </div>
+
+      <div class="right">
+        <h2 class="title"> <span class="fancy" id="fancyTitle"></span></h2>
+        <p class="subtitle">Happy Valentine's Day, gorgeous!</p>
+
+        <div class="question">
+          <strong>Would you go on a Valentine's date with me?</strong>
+          <div style="margin-top:8px;color:rgba(255,255,255,0.85);font-size:14px">Tap the button — a small surprise will follow ❤️</div>
+        </div>
+
+        <div class="actions">
+          <button class="btn yes" id="yesBtn" aria-label="Yes">💖 Yes</button>
+          <!-- NO starts next to YES by default -->
+          <button class="btn no" id="noBtn" aria-label="No">❌ No</button>
+        </div>
+
+        <div class="note">Just for fun — the button will try to dodge your cursor. If you manage to click it, something playful will happen.</div>
+      </div>
+
+      <div class="credit">Made with ♥ </div>
+    </div>
+  </div>
+
+  <div class="hearts-layer" id="hearts"></div>
+  <div class="float-msg" id="floatMsg">I'm so happy you said YES!</div>
+
+  <script>
+    // typewriter-like letter animation for title
+    const titleText = "Happy Valentine's Day, beautiful!";
+    const fancy = document.getElementById('fancyTitle');
+    function animateTitle(text){
+      fancy.innerHTML = '';
+      [...text].forEach((ch,i)=>{
+        const span = document.createElement('span');
+        span.textContent = ch === ' ' ? ' ' : ch;
+        span.style.animationDelay = (i*0.04) + 's';
+        fancy.appendChild(span);
+      });
+    }
+    animateTitle(titleText);
+
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const heartsLayer = document.getElementById('hearts');
+    const card = document.getElementById('card');
+    const bg = document.getElementById('bg');
+    const floatMsg = document.getElementById('floatMsg');
+
+    // create a heart element at x,y
+    function createHeart(x,y,size=28,delay=0){
+      const ns = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(ns,'svg');
+      svg.setAttribute('viewBox','0 0 24 24');
+      svg.classList.add('heart-svg');
+      svg.style.width = size + 'px';
+      svg.style.left = x + 'px';
+      svg.style.top = y + 'px';
+      const path = document.createElementNS(ns,'path');
+      path.setAttribute('d','M12 21s-6.716-4.686-9.172-7.14C-0.075 9.95 2.245 5.5 6.4 6.054 8.3 6.33 9.6 7.9 12 9.7c2.4-1.8 3.7-3.37 5.6-3.646 4.155-.555 6.475 3.897 3.572 6.81C18.716 15.314 12 20 12 20z');
+      // random gradient id
+      const gid = 'g' + Math.random().toString(36).slice(2);
+      const defs = document.createElementNS(ns,'defs');
+      const grad = document.createElementNS(ns,'linearGradient'); grad.setAttribute('id',gid);
+      grad.setAttribute('x1','0'); grad.setAttribute('x2','1');
+      const stop1 = document.createElementNS(ns,'stop'); stop1.setAttribute('offset','0%'); stop1.setAttribute('stop-color',['#ff7eb3','#ffd166','#ff9bb1','#ffb199'][Math.floor(Math.random()*4)]);
+      const stop2 = document.createElementNS(ns,'stop'); stop2.setAttribute('offset','100%'); stop2.setAttribute('stop-color',['#ffb199','#ff7eb3','#ff6fb1','#ffd166'][Math.floor(Math.random()*4)]);
+      grad.appendChild(stop1); grad.appendChild(stop2); defs.appendChild(grad);
+      svg.appendChild(defs);
+      path.setAttribute('fill','url(#'+gid+')');
+      svg.appendChild(path);
+      svg.style.opacity = '0';
+      svg.style.transform = 'translateY(0) scale(0.8)';
+      heartsLayer.appendChild(svg);
+
+      // animate using JS for varied motion
+      const dur = 1600 + Math.random()*1200;
+      const dx = (Math.random()-0.5)*160;
+      const dy = - (300 + Math.random()*240);
+      setTimeout(()=>{
+        svg.style.transition = `transform ${dur}ms cubic-bezier(.2,.8,.2,1), opacity ${dur}ms linear`;
+        svg.style.opacity = '1';
+        svg.style.transform = `translate(${dx}px, ${dy}px) scale(1)`;
+      }, delay);
+      setTimeout(()=>{
+        svg.remove();
+      }, dur + delay + 80);
+    }
+
+    function burstHearts(count=36){
+      const w = window.innerWidth; const h = window.innerHeight;
+      for(let i=0;i<count;i++){
+        const x = Math.random()*w;
+        const y = h - (Math.random()*180);
+        createHeart(x,y,18 + Math.random()*36, i*30);
+      }
+    }
+
+    // CONFETTI: create small colored rectangles
+    function spawnConfetti(x,y,count=40){
+      const colors = ['#ff7eb3','#ffd166','#ff9bb1','#ffb199','#ffd1dc','#ff9f80'];
+      for(let i=0;i<count;i++){
+        const el = document.createElement('div'); el.className='confetti';
+        el.style.left = (x + (Math.random()-0.5)*200) + 'px';
+        el.style.top = (y + (Math.random()-0.5)*80) + 'px';
+        el.style.background = colors[Math.floor(Math.random()*colors.length)];
+        el.style.transform = `rotate(${Math.random()*360}deg)`;
+        document.body.appendChild(el);
+        const dur = 1600 + Math.random()*1600;
+        el.animate([
+          {transform: `translateY(0) rotate(${Math.random()*360}deg)`, opacity:1},
+          {transform: `translateY(${200 + Math.random()*300}px) rotate(${Math.random()*1080}deg)`, opacity:0}
+        ],{duration:dur, easing:'cubic-bezier(.2,.8,.2,1)'});
+        setTimeout(()=>el.remove(), dur+80);
+      }
+    }
+
+    // FIREWORKS: simple particle system on canvas
+    const canvas = document.getElementById('fw');
+    const ctx = canvas.getContext('2d');
+    function resize(){canvas.width = innerWidth; canvas.height = innerHeight}
+    resize(); window.addEventListener('resize', resize);
+
+    let fireworks = [];
+
+    function launchFirework(){
+      const startX = Math.random()*canvas.width;
+      const startY = canvas.height + 10;
+      const targetY = canvas.height * (0.2 + Math.random()*0.5);
+      const hue = Math.random()*360;
+      fireworks.push({x:startX,y:startY,tx:startX,ty:targetY,vy:-6 - Math.random()*4,hue,exploded:false,particles:[]});
+    }
+
+    function explode(fw){
+      const count = 30 + Math.floor(Math.random()*40);
+      for(let i=0;i<count;i++){
+        const angle = Math.random()*Math.PI*2;
+        const speed = 2 + Math.random()*6;
+        fw.particles.push({x:fw.x,y:fw.y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,life:100 + Math.random()*80,hue:fw.hue + (Math.random()*60-30) });
+      }
+    }
+
+    function updateFw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for(let i=fireworks.length-1;i>=0;i--){
+        const fw = fireworks[i];
+        if(!fw.exploded){
+          fw.y += fw.vy;
+          ctx.beginPath();ctx.fillStyle = 'rgba(255,255,255,0.9)';ctx.arc(fw.x,fw.y,2,0,Math.PI*2);ctx.fill();
+          if(fw.y <= fw.ty){ fw.exploded = true; explode(fw); }
+        } else {
+          for(let p of fw.particles){
+            p.vy += 0.04; p.x += p.vx; p.y += p.vy; p.life -= 1;
+            ctx.beginPath(); ctx.fillStyle = `hsl(${p.hue},90%,60%)`; ctx.globalAlpha = Math.max(p.life/140,0);
+            ctx.fillRect(p.x, p.y, 3, 3);
+          }
+          fw.particles = fw.particles.filter(p=>p.life>0);
+          if(fw.particles.length===0) fireworks.splice(i,1);
+        }
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(updateFw);
+    }
+    updateFw();
+
+    function bigCelebrate(){
+      // pulse background
+      bg.classList.add('pulse');
+      setTimeout(()=>bg.classList.remove('pulse'), 2800);
+
+      // launch multiple fireworks
+      for(let i=0;i<6;i++){ setTimeout(launchFirework, i*220); }
+
+      // spawn confetti around center
+      spawnConfetti(innerWidth/2, innerHeight/2, 80);
+
+      // big hearts burst
+      burstHearts(80);
+
+      // floating message
+      floatMsg.classList.add('show');
+      setTimeout(()=>floatMsg.classList.remove('show'), 2400);
+    }
+
+    yesBtn.addEventListener('click', function(e){
+      // small click feedback
+      this.textContent = '💕 Joy!'; this.disabled = true;
+
+      // run combined effect
+      bigCelebrate();
+    });
+
+    // NO button behavior preserved
+    function randomPlaceNo(){
+      const cardRect = card.getBoundingClientRect();
+      const padding = 12;
+      const btnW = noBtn.offsetWidth; const btnH = noBtn.offsetHeight;
+      const minX = cardRect.left + padding; const maxX = cardRect.right - btnW - padding;
+      const minY = cardRect.top + padding; const maxY = cardRect.bottom - btnH - padding - 20;
+      const x = Math.random()*(maxX-minX) + minX;
+      const y = Math.random()*(maxY-minY) + minY;
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+    }
+
+    document.addEventListener('mousemove', function(e){
+      const r = noBtn.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width/2); const dy = e.clientY - (r.top + r.height/2);
+      const dist = Math.hypot(dx,dy);
+      if(dist < 160){ randomPlaceNo(); }
+    });
+
+    setInterval(()=>{if(noBtn.style.position === 'fixed' && !noBtn.disabled) randomPlaceNo();}, 1800);
+
+    noBtn.addEventListener('click', function(e){
+      for(let i=0;i<10;i++){ const x = e.clientX + (Math.random()-0.5)*80; const y = e.clientY + (Math.random()-0.5)*80; createHeart(x,y,12 + Math.random()*26,i*18); }
+      randomPlaceNo();
+    });
+
+    // initial placement
+    function placeNoNextToYes(){ noBtn.style.position = ''; noBtn.style.left = ''; noBtn.style.top = ''; noBtn.classList.remove('moving'); }
+    window.addEventListener('load', ()=>{ placeNoNextToYes(); });
+    window.addEventListener('resize', ()=>{ if(noBtn.style.position !== 'fixed') placeNoNextToYes(); });
+
+    // small floating decorative hearts
+    (function floatDecor(){ const decorCount = 8; for(let i=0;i<decorCount;i++){ const el = document.createElement('div'); el.className='float-heart'; el.style.left = (Math.random()*90)+'%'; el.style.top = (20+Math.random()*60)+'%'; el.style.opacity = 0.06 + Math.random()*0.18; el.style.transform = 'translateY(0)'; document.body.appendChild(el); const dur = 8000 + Math.random()*9000; el.animate([{transform:'translateY(0)'},{transform:'translateY(-40px)'},{transform:'translateY(0)'}],{duration:dur,iterations:Infinity,easing:'ease-in-out'}); } })();
+
+    // helper: replace photo easily
+    // To replace photo: document.getElementById('photo').src = 'LINK_TO_IMAGE';
+  </script>
+</body>
+</html>
